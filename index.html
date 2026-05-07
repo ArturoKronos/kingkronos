@@ -1,1 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KINGKRONOS</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #1a0033; --bg2: #2a004a; --purple: #7b2cbe;
+    --neon-pink: #ff00ff; --neon-cyan: #00ffee; --card-border: #cc00ff;
+  }
+  html, body { background: var(--bg); color: #fff; font-family: 'Orbitron', sans-serif; min-height: 100vh; }
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+    background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.07) 3px, rgba(0,0,0,0.07) 4px);
+  }
+  header {
+    background: #000; border-bottom: 3px solid var(--neon-pink);
+    text-align: center; padding: 18px 16px 14px; position: sticky; top: 0; z-index: 100;
+  }
+  header h1 {
+    font-size: clamp(20px, 5vw, 40px); font-weight: 900; color: var(--neon-pink);
+    letter-spacing: 0.15em; text-transform: uppercase; animation: pulse 3s ease-in-out infinite;
+  }
+  header p { font-size: clamp(9px,1.5vw,13px); color: var(--neon-cyan); letter-spacing: 0.3em; margin-top: 4px; text-shadow: 0 0 8px var(--neon-cyan); text-transform: uppercase; }
+  @keyframes pulse {
+    0%,100% { text-shadow: 0 0 10px #ff00ff, 0 0 30px #cc00ff, 0 0 60px #aa00cc; }
+    50%      { text-shadow: 0 0 20px #ff00ff, 0 0 60px #ff00ff, 0 0 100px #cc00ff; }
+  }
+  main { padding: 24px 16px 40px; max-width: 1400px; margin: 0 auto; }
+  #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 18px; }
+  @media (min-width: 600px)  { #grid { grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap: 20px; } }
+  @media (min-width: 1024px) { #grid { grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 24px; } }
+  .card {
+    display: block; text-decoration: none; background: var(--bg2);
+    border: 2px solid var(--card-border); border-radius: 8px; overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; cursor: pointer;
+  }
+  .card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 0 20px #ff00ff88, 0 0 40px #cc00ff44, 0 8px 20px rgba(0,0,0,0.5);
+    border-color: var(--neon-pink);
+  }
+  .card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; border-bottom: 2px solid var(--card-border); }
+  .card-label {
+    font-family: Georgia, serif; font-style: italic; font-size: clamp(12px,2vw,14px);
+    color: #fff; text-align: center; padding: 10px 8px; background: var(--bg2);
+    text-shadow: 0 0 6px rgba(255,255,255,0.4); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  #loading { grid-column:1/-1; text-align:center; padding:60px 20px; color:rgba(204,0,255,0.5); font-size:12px; letter-spacing:0.2em; }
+  footer { background:#000; border-top:2px solid var(--purple); text-align:center; padding:16px; font-size:10px; color:rgba(255,255,255,0.2); letter-spacing:0.15em; }
+</style>
+</head>
+<body>
+<header>
+  <h1>KINGKRONOS</h1>
+  <p>✦ colección ✦</p>
+</header>
+<main>
+  <div id="grid">
+    <div id="loading">Cargando artículos...</div>
+  </div>
+</main>
+<footer>KINGKRONOS &copy; 2025 &nbsp;·&nbsp; TODOS LOS DERECHOS RESERVADOS</footer>
+<script>
+  const REPO = 'ArturoKronos/kingkronos';
+  const DATA_URL = `https://raw.githubusercontent.com/${REPO}/main/data.json`;
 
+  async function loadItems() {
+    const grid = document.getElementById('grid');
+    try {
+      const res = await fetch(DATA_URL + '?t=' + Date.now());
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      grid.innerHTML = '';
+      if (!data.items || data.items.length === 0) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:rgba(204,0,255,0.4);font-size:12px;letter-spacing:0.2em;">Próximamente...</div>';
+        return;
+      }
+      data.items.forEach(item => {
+        const a = document.createElement('a');
+        a.className = 'card';
+        a.href = data.link || '#';
+        if (data.link) { a.target = '_blank'; a.rel = 'noopener'; }
+        const imgSrc = item.src.startsWith('http') ? item.src : `https://raw.githubusercontent.com/${REPO}/main/fotos/${item.src}`;
+        a.innerHTML = `
+          <img src="${imgSrc}" alt="${item.title}" loading="lazy">
+          <div class="card-label">${item.title}</div>
+        `;
+        grid.appendChild(a);
+      });
+    } catch(e) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:rgba(204,0,255,0.4);font-size:12px;letter-spacing:0.2em;">Próximamente...</div>';
+    }
+  }
+
+  loadItems();
+</script>
+</body>
+</html>
