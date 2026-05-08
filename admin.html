@@ -6,13 +6,10 @@
 <title>KINGKRONOS — Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
   :root { --bg:#1a0033; --bg2:#2a004a; --neon-pink:#ff00ff; --neon-cyan:#00ffee; --card-border:#cc00ff; --purple:#7b2cbe; }
-  html, body { background: var(--bg); color: #fff; font-family: 'Orbitron', sans-serif; min-height: 100vh; }
-  body::before {
-    content:''; position:fixed; inset:0; pointer-events:none; z-index:9999;
-    background: repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.07) 3px,rgba(0,0,0,0.07) 4px);
-  }
+  html, body { background:var(--bg); color:#fff; font-family:'Orbitron',sans-serif; min-height:100vh; }
+  body::before { content:''; position:fixed; inset:0; pointer-events:none; z-index:9999; background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.07) 3px,rgba(0,0,0,0.07) 4px); }
 
   /* HEADER */
   header { background:#000; border-bottom:3px solid var(--neon-pink); text-align:center; padding:16px; position:sticky; top:0; z-index:100; }
@@ -20,48 +17,57 @@
   header p { font-size:10px; color:var(--neon-cyan); letter-spacing:0.3em; margin-top:3px; text-shadow:0 0 8px var(--neon-cyan); }
 
   /* LOGIN */
-  #login-screen { position:fixed; inset:0; background:rgba(10,0,25,0.97); z-index:500; display:flex; align-items:center; justify-content:center; padding:20px; }
+  #login-screen { position:fixed; inset:0; background:rgba(10,0,25,0.98); z-index:500; display:flex; align-items:center; justify-content:center; padding:20px; }
   #login-box { background:var(--bg2); border:2px solid var(--neon-pink); border-radius:12px; padding:36px 28px; max-width:360px; width:100%; text-align:center; }
   #login-box h2 { font-size:15px; color:var(--neon-pink); letter-spacing:0.15em; margin-bottom:6px; text-shadow:0 0 10px #ff00ff; }
   #login-box p { font-size:10px; color:rgba(0,255,238,0.6); letter-spacing:0.2em; margin-bottom:24px; }
-  .lf { width:100%; background:rgba(255,255,255,0.05); border:1px solid var(--card-border); border-radius:5px; color:#fff; font-family:'Orbitron',sans-serif; font-size:11px; padding:11px 14px; outline:none; margin-bottom:12px; letter-spacing:0.05em; }
+  .lf { width:100%; background:rgba(255,255,255,0.05); border:1px solid var(--card-border); border-radius:5px; color:#fff; font-family:'Orbitron',sans-serif; font-size:11px; padding:11px 14px; outline:none; margin-bottom:12px; }
   .lf:focus { border-color:var(--neon-pink); box-shadow:0 0 8px rgba(255,0,255,0.3); }
   .lf::placeholder { color:rgba(255,255,255,0.25); }
   #login-error { font-size:10px; color:#ff4444; letter-spacing:0.1em; margin-bottom:10px; min-height:16px; }
   #login-btn { width:100%; background:var(--neon-pink); border:none; color:#000; font-family:'Orbitron',sans-serif; font-size:12px; font-weight:700; padding:12px; border-radius:5px; cursor:pointer; letter-spacing:0.1em; }
   #login-btn:hover { background:#ff44ff; }
-  .back-link { display:block; margin-top:14px; color:rgba(255,255,255,0.3); font-size:10px; text-decoration:underline; cursor:pointer; }
+  .back-link { display:block; margin-top:14px; color:rgba(255,255,255,0.3); font-size:10px; text-decoration:underline; }
 
-  /* PANEL */
+  /* APP */
   #app { display:none; }
   #app.visible { display:block; }
 
+  /* TOOLBAR */
   .toolbar { background:#0d0020; border-bottom:2px solid var(--card-border); padding:12px 20px; display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:center; }
   .toolbar label { font-size:10px; color:var(--neon-cyan); letter-spacing:0.1em; }
-  .toolbar input[type="text"] { background:rgba(255,255,255,0.05); border:1px solid var(--card-border); border-radius:4px; color:#fff; font-family:'Orbitron',sans-serif; font-size:10px; padding:7px 12px; outline:none; min-width:240px; }
-  .toolbar input[type="text"]:focus { border-color:var(--neon-pink); }
-  .toolbar input[type="text"]::placeholder { color:rgba(255,255,255,0.25); }
-  .abtn { background:transparent; border:1.5px solid var(--neon-pink); color:var(--neon-pink); font-family:'Orbitron',sans-serif; font-size:10px; padding:7px 14px; border-radius:4px; cursor:pointer; letter-spacing:0.08em; text-transform:uppercase; transition:background 0.2s; }
+  .ti { background:rgba(255,255,255,0.05); border:1px solid var(--card-border); border-radius:4px; color:#fff; font-family:'Orbitron',sans-serif; font-size:10px; padding:7px 12px; outline:none; min-width:260px; }
+  .ti:focus { border-color:var(--neon-pink); }
+  .ti::placeholder { color:rgba(255,255,255,0.25); }
+  .abtn { background:transparent; border:1.5px solid var(--neon-pink); color:var(--neon-pink); font-family:'Orbitron',sans-serif; font-size:10px; padding:7px 14px; border-radius:4px; cursor:pointer; letter-spacing:0.08em; text-transform:uppercase; transition:background 0.2s; text-decoration:none; display:inline-block; }
   .abtn:hover { background:rgba(255,0,255,0.15); }
   .abtn.grey { border-color:rgba(255,255,255,0.2); color:rgba(255,255,255,0.4); }
   .abtn.grey:hover { background:rgba(255,255,255,0.06); }
 
-  /* TOAST */
-  #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--bg2); border:1.5px solid var(--neon-cyan); color:var(--neon-cyan); font-size:11px; padding:10px 22px; border-radius:6px; letter-spacing:0.1em; z-index:9000; opacity:0; transition:opacity 0.3s; pointer-events:none; text-align:center; }
-  #toast.show { opacity:1; }
+  /* TOKEN */
+  #token-info { background:rgba(0,255,238,0.05); border:1px solid rgba(0,255,238,0.2); border-radius:6px; padding:14px 16px; margin:16px auto; max-width:640px; font-size:10px; color:rgba(0,255,238,0.7); letter-spacing:0.08em; line-height:2; text-align:center; }
+  #token-info a { color:var(--neon-cyan); }
 
-  /* UPLOAD ZONE */
-  #upload-zone { margin:24px auto; max-width:600px; padding:0 16px; }
-  #drop-area {
-    border:2px dashed var(--card-border); border-radius:10px; padding:36px 20px; text-align:center;
-    cursor:pointer; transition:background 0.2s, border-color 0.2s; color:rgba(204,0,255,0.6);
-  }
+  /* UPLOAD */
+  #upload-zone { margin:20px auto; max-width:640px; padding:0 16px; }
+  #drop-area { border:2px dashed var(--card-border); border-radius:10px; padding:32px 20px; text-align:center; cursor:pointer; transition:background 0.2s,border-color 0.2s; color:rgba(204,0,255,0.6); }
   #drop-area:hover, #drop-area.drag { background:rgba(204,0,255,0.08); border-color:var(--neon-pink); color:var(--neon-pink); }
-  #drop-area p { font-size:12px; letter-spacing:0.15em; margin-top:8px; }
-  #drop-area input { display:none; }
+  #drop-area p { font-size:11px; letter-spacing:0.15em; margin-top:8px; }
+
+  /* COLA DE SUBIDA */
+  #queue-section { display:none; max-width:640px; margin:0 auto 24px; padding:0 16px; }
+  #queue-section h3 { font-size:11px; color:var(--neon-cyan); letter-spacing:0.15em; margin-bottom:12px; text-align:center; }
+  #queue-list { display:flex; flex-direction:column; gap:10px; }
+  .queue-item { background:var(--bg2); border:1px solid var(--card-border); border-radius:8px; padding:10px 12px; display:flex; align-items:center; gap:12px; }
+  .queue-thumb { width:48px; height:60px; object-fit:cover; border-radius:4px; border:1px solid var(--card-border); flex-shrink:0; }
+  .queue-title-input { flex:1; background:rgba(255,255,255,0.06); border:1px solid var(--card-border); border-radius:4px; color:#fff; font-family:'Orbitron',sans-serif; font-size:11px; padding:7px 10px; outline:none; }
+  .queue-title-input:focus { border-color:var(--neon-pink); }
+  .queue-remove { background:transparent; border:none; color:rgba(255,0,255,0.5); cursor:pointer; font-size:18px; padding:0 4px; flex-shrink:0; }
+  .queue-remove:hover { color:var(--neon-pink); }
+  #upload-all-btn { display:block; margin:14px auto 0; }
 
   /* PROGRESS */
-  #progress-wrap { display:none; margin:16px auto; max-width:600px; padding:0 16px; }
+  #progress-wrap { display:none; max-width:640px; margin:0 auto 16px; padding:0 16px; }
   #progress-bar-bg { background:rgba(255,255,255,0.08); border-radius:4px; height:8px; overflow:hidden; }
   #progress-bar { height:100%; background:var(--neon-pink); border-radius:4px; width:0%; transition:width 0.3s; box-shadow:0 0 8px var(--neon-pink); }
   #progress-text { font-size:10px; color:var(--neon-cyan); letter-spacing:0.1em; margin-top:6px; text-align:center; }
@@ -71,7 +77,6 @@
   #grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:18px; }
   @media(min-width:600px)  { #grid { grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:20px; } }
   @media(min-width:1024px) { #grid { grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:24px; } }
-
   .card { background:var(--bg2); border:2px solid var(--card-border); border-radius:8px; overflow:hidden; position:relative; }
   .card img { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; border-bottom:2px solid var(--card-border); }
   .card-label { font-family:Georgia,serif; font-style:italic; font-size:13px; color:#fff; text-align:center; padding:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -80,8 +85,9 @@
 
   footer { background:#000; border-top:2px solid var(--purple); text-align:center; padding:16px; font-size:10px; color:rgba(255,255,255,0.2); letter-spacing:0.15em; }
 
-  /* TOKEN INFO */
-  #token-info { background:rgba(0,255,238,0.06); border:1px solid rgba(0,255,238,0.2); border-radius:6px; padding:12px 16px; margin:16px auto; max-width:600px; font-size:10px; color:rgba(0,255,238,0.7); letter-spacing:0.08em; line-height:1.8; text-align:center; }
+  /* TOAST */
+  #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--bg2); border:1.5px solid var(--neon-cyan); color:var(--neon-cyan); font-size:11px; padding:10px 22px; border-radius:6px; letter-spacing:0.1em; z-index:9000; opacity:0; transition:opacity 0.3s; pointer-events:none; text-align:center; white-space:nowrap; }
+  #toast.show { opacity:1; }
 </style>
 </head>
 <body>
@@ -106,9 +112,10 @@
 
 <!-- APP -->
 <div id="app">
+
   <div class="toolbar">
     <label>Enlace global:</label>
-    <input type="text" id="global-link" placeholder="https://t.me/kingkronos">
+    <input class="ti" type="text" id="global-link" placeholder="https://linktr.ee/Kingkronos787" value="https://linktr.ee/Kingkronos787">
     <button class="abtn" onclick="saveLink()">Guardar enlace</button>
     <a class="abtn grey" href="index.html" target="_blank">Ver escaparate</a>
     <button class="abtn grey" onclick="doLogout()">Cerrar sesión</button>
@@ -116,53 +123,74 @@
 
   <div id="token-info">
     Para subir fotos necesitas un <strong>GitHub Token</strong> →
-    <a href="https://github.com/settings/tokens/new?scopes=repo&description=KingKronos" target="_blank" style="color:var(--neon-cyan);">Crear token aquí</a>
-    (marca el permiso <em>repo</em> y cópialo abajo)
-    <br><br>
-    <input class="lf" type="password" id="gh-token" placeholder="Pega aquí tu GitHub Token" style="max-width:340px;margin:0 auto 0;">
+    <a href="https://github.com/settings/tokens/new?scopes=repo&description=KingKronos" target="_blank">Crear token aquí</a>
+    (marca el permiso <em>repo</em> y cópialo abajo)<br><br>
+    <input class="lf ti" type="password" id="gh-token" placeholder="Pega aquí tu GitHub Token (ghp_...)" style="max-width:360px;margin:0 auto 8px;">
     <br>
-    <button class="abtn" style="margin-top:8px;" onclick="saveToken()">Guardar token (solo en este navegador)</button>
+    <button class="abtn" onclick="saveToken()">Guardar token</button>
   </div>
 
+  <!-- ZONA SUBIDA -->
   <div id="upload-zone">
-    <div id="drop-area" onclick="document.getElementById('file-input').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFiles(event)">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      <p>Pulsa o arrastra fotos aquí para subir</p>
-      <input type="file" id="file-input" accept="image/*" multiple onchange="handleFiles(event.target.files)">
+    <div id="drop-area"
+      onclick="document.getElementById('file-input').click()"
+      ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFiles(event)">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      <p>Pulsa o arrastra fotos aquí</p>
+      <input type="file" id="file-input" accept="image/*" multiple style="display:none" onchange="addToQueue(event.target.files)">
     </div>
   </div>
 
+  <!-- COLA CON TÍTULOS EDITABLES -->
+  <div id="queue-section">
+    <h3>✦ EDITA LOS TÍTULOS ANTES DE SUBIR ✦</h3>
+    <div id="queue-list"></div>
+    <button class="abtn" id="upload-all-btn" onclick="uploadQueue()">Subir todo a la web</button>
+  </div>
+
+  <!-- BARRA PROGRESO -->
   <div id="progress-wrap">
     <div id="progress-bar-bg"><div id="progress-bar"></div></div>
     <div id="progress-text">Subiendo...</div>
   </div>
 
+  <!-- ARTÍCULOS PUBLICADOS -->
   <main>
-    <div id="grid"><div style="grid-column:1/-1;text-align:center;padding:40px;color:rgba(204,0,255,0.4);font-size:12px;letter-spacing:0.2em;">Cargando...</div></div>
+    <div id="grid">
+      <div style="grid-column:1/-1;text-align:center;padding:40px;color:rgba(204,0,255,0.4);font-size:12px;letter-spacing:0.2em;">Cargando...</div>
+    </div>
   </main>
+
   <footer>KINGKRONOS &copy; 2025 &nbsp;·&nbsp; TODOS LOS DERECHOS RESERVADOS</footer>
 </div>
 
 <div id="toast"></div>
 
 <script>
-  // ══════════════════════════════════════
-  //  CREDENCIALES DE ACCESO AL PANEL
-  // ══════════════════════════════════════
-  const ADMIN_USER = 'admin';        // ← cambia el usuario
-  const ADMIN_PASS = 'kingkronos1';  // ← cambia la contraseña
-  // ══════════════════════════════════════
+  // ══════════════════════════════
+  //  CREDENCIALES DEL PANEL ADMIN
+  // ══════════════════════════════
+  const ADMIN_USER = 'admin';
+  const ADMIN_PASS = 'kingkronos1';
+  // ══════════════════════════════
 
-  const REPO  = 'ArturoKronos/kingkronos';
+  const REPO   = 'ArturoKronos/kingkronos';
   const BRANCH = 'main';
-  const RAW   = `https://raw.githubusercontent.com/${REPO}/${BRANCH}`;
-  const API   = `https://api.github.com/repos/${REPO}`;
+  const RAW    = `https://raw.githubusercontent.com/${REPO}/${BRANCH}`;
+  const API    = `https://api.github.com/repos/${REPO}`;
+  const DEFAULT_LINK = 'https://linktr.ee/Kingkronos787';
 
   let items = [];
-  let globalLink = '';
+  let globalLink = DEFAULT_LINK;
   let ghToken = '';
 
-  // ── LOGIN ──
+  // ─── COLA DE IMÁGENES PENDIENTES ───
+  let queue = []; // [{file, dataUrl, title}]
+
+  // ─── LOGIN ───
   function doLogin() {
     const u = document.getElementById('lu').value.trim();
     const p = document.getElementById('lp').value;
@@ -170,156 +198,195 @@
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('app').classList.add('visible');
       sessionStorage.setItem('kk_admin','1');
-      ghToken = localStorage.getItem('kk_gh_token') || '';
-      if (ghToken) document.getElementById('gh-token').value = '••••••••••••••••';
-      loadData();
+      initApp();
     } else {
       document.getElementById('login-error').textContent = 'Usuario o contraseña incorrectos';
       document.getElementById('lp').value = '';
     }
   }
-  function doLogout() {
-    sessionStorage.removeItem('kk_admin');
-    location.reload();
-  }
+  function doLogout() { sessionStorage.removeItem('kk_admin'); location.reload(); }
   document.getElementById('lp').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
   document.getElementById('lu').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('lp').focus(); });
 
   if (sessionStorage.getItem('kk_admin')==='1') {
     document.getElementById('login-screen').style.display='none';
     document.getElementById('app').classList.add('visible');
+    initApp();
+  }
+
+  function initApp() {
     ghToken = localStorage.getItem('kk_gh_token') || '';
     if (ghToken) document.getElementById('gh-token').value = '••••••••••••••••';
     loadData();
   }
 
-  // ── TOKEN ──
+  // ─── TOKEN ───
   function saveToken() {
     const t = document.getElementById('gh-token').value.trim();
-    if (!t || t.startsWith('•')) { toast('Pega un token válido'); return; }
+    if (!t || t.startsWith('•')) { toast('Pega un token válido (empieza por ghp_...)'); return; }
     ghToken = t;
     localStorage.setItem('kk_gh_token', t);
     document.getElementById('gh-token').value = '••••••••••••••••';
     toast('Token guardado ✓');
   }
 
-  // ── LOAD DATA ──
+  // ─── CARGAR DATA ───
   async function loadData() {
     try {
-      const res = await fetch(`${RAW}/data.json?t=${Date.now()}`);
+      const res = await fetch(`${RAW}/data.json?nc=${Date.now()}`);
       if (res.ok) {
         const data = await res.json();
         items = data.items || [];
-        globalLink = data.link || '';
+        globalLink = data.link || DEFAULT_LINK;
         document.getElementById('global-link').value = globalLink;
       }
     } catch(e) {}
     renderGrid();
   }
 
-  // ── SAVE DATA.JSON TO GITHUB ──
+  // ─── GUARDAR data.json EN GITHUB ───
   async function saveData() {
-    if (!ghToken) { toast('Necesitas un GitHub Token para guardar cambios'); return false; }
+    if (!ghToken) { toast('Necesitas un GitHub Token'); return false; }
     const content = JSON.stringify({ link: globalLink, items }, null, 2);
     const encoded = btoa(unescape(encodeURIComponent(content)));
     let sha = '';
     try {
-      const cur = await fetch(`${API}/contents/data.json`, { headers: { Authorization: `token ${ghToken}` } });
-      if (cur.ok) { const j = await cur.json(); sha = j.sha; }
+      const cur = await fetch(`${API}/contents/data.json`, { headers: { Authorization:`token ${ghToken}` } });
+      if (cur.ok) sha = (await cur.json()).sha;
     } catch(e) {}
-    const body = { message: 'Actualizar data.json', content: encoded, branch: BRANCH };
+    const body = { message:'Actualizar data.json', content:encoded, branch:BRANCH };
     if (sha) body.sha = sha;
     const res = await fetch(`${API}/contents/data.json`, {
-      method: 'PUT',
-      headers: { Authorization: `token ${ghToken}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+      method:'PUT',
+      headers:{ Authorization:`token ${ghToken}`, 'Content-Type':'application/json' },
+      body:JSON.stringify(body)
     });
     return res.ok;
   }
 
-  // ── SAVE LINK ──
+  // ─── GUARDAR ENLACE ───
   async function saveLink() {
-    globalLink = document.getElementById('global-link').value.trim();
+    globalLink = document.getElementById('global-link').value.trim() || DEFAULT_LINK;
     toast('Guardando enlace...');
     const ok = await saveData();
-    toast(ok ? 'Enlace guardado ✓' : 'Error al guardar. ¿Tienes el token guardado?');
+    toast(ok ? 'Enlace guardado ✓' : '⚠ Error — ¿Tienes el token guardado?');
   }
 
-  // ── UPLOAD FILES ──
+  // ─── AÑADIR A LA COLA ───
   function dragOver(e) { e.preventDefault(); document.getElementById('drop-area').classList.add('drag'); }
   function dragLeave()  { document.getElementById('drop-area').classList.remove('drag'); }
-  function dropFiles(e) { e.preventDefault(); dragLeave(); handleFiles(e.dataTransfer.files); }
+  function dropFiles(e) { e.preventDefault(); dragLeave(); addToQueue(e.dataTransfer.files); }
 
-  async function handleFiles(files) {
-    if (!ghToken) { toast('Primero guarda tu GitHub Token'); return; }
+  async function addToQueue(files) {
     const arr = Array.from(files).filter(f => f.type.startsWith('image/'));
     if (!arr.length) return;
+    for (const file of arr) {
+      const dataUrl = await fileToBase64(file);
+      const title = file.name.replace(/\.[^.]+$/, ''); // nombre sin extensión como título por defecto
+      queue.push({ file, dataUrl, title });
+    }
+    document.getElementById('file-input').value = '';
+    renderQueue();
+  }
+
+  function renderQueue() {
+    const section = document.getElementById('queue-section');
+    const list = document.getElementById('queue-list');
+    if (!queue.length) { section.style.display='none'; return; }
+    section.style.display = 'block';
+    list.innerHTML = '';
+    queue.forEach((item, i) => {
+      const div = document.createElement('div');
+      div.className = 'queue-item';
+      div.innerHTML = `
+        <img class="queue-thumb" src="${item.dataUrl}" alt="">
+        <input class="queue-title-input" type="text" value="${esc(item.title)}" placeholder="Título del artículo" onchange="queue[${i}].title=this.value" oninput="queue[${i}].title=this.value">
+        <button class="queue-remove" onclick="removeFromQueue(${i})" title="Quitar">✕</button>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function removeFromQueue(i) {
+    queue.splice(i, 1);
+    renderQueue();
+  }
+
+  // ─── SUBIR COLA A GITHUB ───
+  async function uploadQueue() {
+    if (!ghToken) { toast('Primero guarda tu GitHub Token'); return; }
+    if (!queue.length) return;
 
     const pw = document.getElementById('progress-wrap');
     const pb = document.getElementById('progress-bar');
     const pt = document.getElementById('progress-text');
-    pw.style.display = 'block'; pb.style.width = '0%';
+    pw.style.display = 'block';
+    document.getElementById('queue-section').style.display = 'none';
 
-    for (let i = 0; i < arr.length; i++) {
-      const file = arr[i];
-      pt.textContent = `Subiendo ${i+1} de ${arr.length}: ${file.name}`;
-      pb.style.width = `${Math.round((i / arr.length) * 100)}%`;
+    let ok = 0;
+    for (let i = 0; i < queue.length; i++) {
+      const item = queue[i];
+      const title = item.title.trim() || item.file.name.replace(/\.[^.]+$/,'');
+      const fileName = sanitize(item.file.name);
 
-      // leer archivo
-      const b64 = await fileToBase64(file);
-      const fileName = sanitizeName(file.name);
+      pt.textContent = `Subiendo ${i+1} de ${queue.length}: ${title}`;
+      pb.style.width = `${Math.round((i / queue.length) * 100)}%`;
 
-      // subir imagen a /fotos/
-      let imgSha = '';
+      // subir imagen
+      let sha = '';
       try {
-        const cur = await fetch(`${API}/contents/fotos/${fileName}`, { headers: { Authorization: `token ${ghToken}` } });
-        if (cur.ok) { const j = await cur.json(); imgSha = j.sha; }
+        const cur = await fetch(`${API}/contents/fotos/${fileName}`, { headers:{ Authorization:`token ${ghToken}` } });
+        if (cur.ok) sha = (await cur.json()).sha;
       } catch(e) {}
-      const imgBody = { message: `Añadir ${fileName}`, content: b64.split(',')[1], branch: BRANCH };
-      if (imgSha) imgBody.sha = imgSha;
-      const imgRes = await fetch(`${API}/contents/fotos/${fileName}`, {
-        method: 'PUT',
-        headers: { Authorization: `token ${ghToken}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify(imgBody)
-      });
-      if (!imgRes.ok) { toast(`Error subiendo ${fileName}`); continue; }
 
-      // añadir al array
-      const title = file.name.replace(/\.[^.]+$/, '');
-      items.push({ src: fileName, title });
+      const b64 = item.dataUrl.split(',')[1];
+      const imgBody = { message:`Añadir ${fileName}`, content:b64, branch:BRANCH };
+      if (sha) imgBody.sha = sha;
+
+      const imgRes = await fetch(`${API}/contents/fotos/${fileName}`, {
+        method:'PUT',
+        headers:{ Authorization:`token ${ghToken}`, 'Content-Type':'application/json' },
+        body:JSON.stringify(imgBody)
+      });
+
+      if (imgRes.ok) {
+        items.push({ src: fileName, title });
+        ok++;
+      } else {
+        toast(`Error subiendo ${fileName}`);
+      }
     }
 
     pb.style.width = '100%';
-    pt.textContent = 'Guardando cambios...';
-    const ok = await saveData();
+    pt.textContent = 'Guardando cambios en la web...';
+
+    const saved = await saveData();
     pw.style.display = 'none';
-    toast(ok ? `${arr.length} foto(s) subidas y guardadas ✓` : 'Fotos subidas pero error al guardar data.json');
+    queue = [];
+
+    if (saved) {
+      toast(`✓ ${ok} foto(s) publicadas. Recarga el escaparate para verlas.`);
+    } else {
+      toast('Fotos subidas pero error al guardar data.json. Reintenta.');
+    }
     renderGrid();
   }
 
-  function fileToBase64(file) {
-    return new Promise(res => { const r = new FileReader(); r.onload = e => res(e.target.result); r.readAsDataURL(file); });
-  }
-  function sanitizeName(name) {
-    return name.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9._-]/g,'');
-  }
-
-  // ── DELETE ──
+  // ─── ELIMINAR ───
   async function deleteItem(idx) {
     if (!confirm('¿Eliminar este artículo?')) return;
     const item = items[idx];
     items.splice(idx, 1);
     renderGrid();
     toast('Eliminando...');
-    // borrar imagen de GitHub
     try {
-      const cur = await fetch(`${API}/contents/fotos/${item.src}`, { headers: { Authorization: `token ${ghToken}` } });
+      const cur = await fetch(`${API}/contents/fotos/${item.src}`, { headers:{ Authorization:`token ${ghToken}` } });
       if (cur.ok) {
         const j = await cur.json();
         await fetch(`${API}/contents/fotos/${item.src}`, {
-          method: 'DELETE',
-          headers: { Authorization: `token ${ghToken}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: `Eliminar ${item.src}`, sha: j.sha, branch: BRANCH })
+          method:'DELETE',
+          headers:{ Authorization:`token ${ghToken}`, 'Content-Type':'application/json' },
+          body:JSON.stringify({ message:`Eliminar ${item.src}`, sha:j.sha, branch:BRANCH })
         });
       }
     } catch(e) {}
@@ -327,7 +394,7 @@
     toast(ok ? 'Artículo eliminado ✓' : 'Error al guardar cambios');
   }
 
-  // ── RENDER ──
+  // ─── RENDER GRID ───
   function renderGrid() {
     const grid = document.getElementById('grid');
     grid.innerHTML = '';
@@ -338,21 +405,31 @@
     items.forEach((item, idx) => {
       const div = document.createElement('div');
       div.className = 'card';
-      const imgSrc = item.src.startsWith('http') ? item.src : `${RAW}/fotos/${item.src}`;
+      const imgSrc = item.src.startsWith('http') ? item.src : `${RAW}/fotos/${item.src}?nc=${Date.now()}`;
       div.innerHTML = `
-        <img src="${imgSrc}?t=${Date.now()}" alt="${item.title}" loading="lazy">
-        <div class="card-label">${item.title}</div>
+        <img src="${imgSrc}" alt="${esc(item.title)}" loading="lazy">
+        <div class="card-label">${esc(item.title)}</div>
         <div class="del-btn" onclick="deleteItem(${idx})" title="Eliminar">✕</div>
       `;
       grid.appendChild(div);
     });
   }
 
-  // ── TOAST ──
+  // ─── UTILS ───
+  function fileToBase64(file) {
+    return new Promise(res => { const r = new FileReader(); r.onload = e => res(e.target.result); r.readAsDataURL(file); });
+  }
+  function sanitize(name) {
+    return name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'-').replace(/[^a-z0-9._-]/g,'');
+  }
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
   function toast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg; t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
+    clearTimeout(t._tid);
+    t._tid = setTimeout(() => t.classList.remove('show'), 3500);
   }
 </script>
 </body>
