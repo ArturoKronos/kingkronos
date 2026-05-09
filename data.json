@@ -16,6 +16,14 @@
     {
       "src": "documento6-1.png",
       "title": "documento6 (1)"
+    },
+    {
+      "images": [
+        "documento19-1.png",
+        "documento18-1.png",
+        "documento9-1.png"
+      ],
+      "title": "coche"
     }
   ]
 }
