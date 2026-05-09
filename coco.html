@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KINGKRONOS — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #1a1a1a;
+    --accent-teal: #00d4d4;
+    --accent-yellow: #ffd700;
+    --text-light: #f0f0f0;
+    --text-muted: #a0a0a0;
+    --border: #00d4d4;
+  }
+  
+  html, body {
+    background: var(--bg);
+    color: var(--text-light);
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    border-bottom: 3px solid var(--accent-teal);
+    text-align: center;
+    padding: 20px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0, 212, 212, 0.1);
+  }
+  
+  header h1 {
+    font-size: clamp(18px, 4vw, 28px);
+    font-weight: 700;
+    color: var(--accent-yellow);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  
+  header p {
+    font-size: 11px;
+    color: var(--accent-teal);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* LOGIN */
+  #login-screen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  #login-box {
+    background: var(--bg2);
+    border: 2px solid var(--accent-teal);
+    border-radius: 12px;
+    padding: 40px 32px;
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 212, 212, 0.15);
+  }
+  
+  #login-box h2 {
+    font-size: 16px;
+    color: var(--accent-yellow);
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  
+  #login-box p {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    margin-bottom: 28px;
+    text-transform: uppercase;
+  }
+  
+  .lf {
+    width: 100%;
+    background: rgba(0, 212, 212, 0.05);
+    border: 2px solid var(--accent-teal);
+    border-radius: 6px;
+    color: var(--text-light);
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    padding: 12px 14px;
+    outline: none;
+    margin-bottom: 14px;
+    transition: all 0.2s;
+  }
+  
+  .lf:focus {
+    border-color: var(--accent-yellow);
+    background: rgba(255, 215, 0, 0.05);
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.2);
+  }
+  
+  .lf::placeholder { color: var(--text-muted); }
+  
+  #login-error {
+    font-size: 11px;
+    color: #ff6b6b;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+    min-height: 18px;
+    font-weight: 600;
+  }
+  
+  #login-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--accent-teal) 0%, var(--accent-yellow) 100%);
+    border: none;
+    color: #000;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 13px;
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.3s;
+  }
+  
+  #login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 212, 212, 0.3);
+  }
+  
+  .back-link {
+    display: block;
+    margin-top: 16px;
+    color: var(--text-muted);
+    font-size: 11px;
+    text-decoration: none;
+    transition: color 0.2s;
+    letter-spacing: 0.05em;
+  }
+  
+  .back-link:hover { color: var(--accent-teal); }
+
+  /* APP */
+  #app { display: none; }
+  #app.visible { display: block; }
+
+  /* TOOLBAR */
+  .toolbar {
+    background: var(--bg2);
+    border-bottom: 2px solid var(--accent-teal);
+    padding: 14px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .toolbar label {
+    font-size: 11px;
+    color: var(--accent-teal);
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  
+  .ti {
+    background: rgba(0, 212, 212, 0.05);
+    border: 2px solid var(--accent-teal);
+    border-radius: 6px;
+    color: var(--text-light);
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    padding: 8px 12px;
+    outline: none;
+    min-width: 260px;
+    transition: all 0.2s;
+  }
+  
+  .ti:focus {
+    border-color: var(--accent-yellow);
+    background: rgba(255, 215, 0, 0.05);
+  }
+  
+  .ti::placeholder { color: var(--text-muted); }
+  
+  .abtn {
+    background: transparent;
+    border: 2px solid var(--accent-teal);
+    color: var(--accent-teal);
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: 600;
+  }
+  
+  .abtn:hover {
+    background: rgba(0, 212, 212, 0.1);
+    border-color: var(--accent-yellow);
+    color: var(--accent-yellow);
+  }
+  
+  .abtn.grey {
+    border-color: var(--text-muted);
+    color: var(--text-muted);
+  }
+  
+  .abtn.grey:hover {
+    background: rgba(160, 160, 160, 0.1);
+    border-color: var(--accent-teal);
+    color: var(--accent-teal);
+  }
+
+  /* TOKEN */
+  #token-info {
+    background: rgba(0, 212, 212, 0.05);
+    border: 2px solid var(--accent-teal);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin: 18px auto;
+    max-width: 640px;
+    font-size: 11px;
+    color: var(--text-light);
+    letter-spacing: 0.08em;
+    line-height: 2;
+    text-align: center;
+  }
+  
+  #token-info a { color: var(--accent-yellow); font-weight: 600; }
+
+  /* MODO SUBIDA */
+  #mode-selector {
+    max-width: 640px;
+    margin: 18px auto 0;
+    padding: 0 16px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  
+  .mode-btn {
+    flex: 1;
+    max-width: 220px;
+    background: rgba(0, 212, 212, 0.05);
+    border: 2px solid var(--accent-teal);
+    color: var(--text-muted);
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    padding: 12px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    text-align: center;
+    transition: all 0.2s;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  
+  .mode-btn.active {
+    background: rgba(0, 212, 212, 0.15);
+    border-color: var(--accent-yellow);
+    color: var(--accent-yellow);
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.2);
+  }
+  
+  .mode-btn:hover { background: rgba(0, 212, 212, 0.1); }
+
+  /* UPLOAD */
+  #upload-zone { margin: 18px auto; max-width: 640px; padding: 0 16px; }
+  
+  #drop-area {
+    border: 2px dashed var(--accent-teal);
+    border-radius: 10px;
+    padding: 36px 22px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--accent-teal);
+    background: rgba(0, 212, 212, 0.02);
+  }
+  
+  #drop-area:hover, #drop-area.drag {
+    background: rgba(0, 212, 212, 0.1);
+    border-color: var(--accent-yellow);
+    color: var(--accent-yellow);
+  }
+  
+  #drop-area p { font-size: 12px; letter-spacing: 0.1em; margin-top: 10px; font-weight: 600; }
+  #drop-area .hint { font-size: 10px; color: var(--text-muted); margin-top: 8px; letter-spacing: 0.08em; }
+
+  /* COLA */
+  #queue-section { display: none; max-width: 640px; margin: 0 auto 24px; padding: 0 16px; }
+  #queue-section h3 { font-size: 12px; color: var(--accent-yellow); letter-spacing: 0.15em; margin-bottom: 14px; text-align: center; text-transform: uppercase; font-weight: 700; }
+  #queue-list { display: flex; flex-direction: column; gap: 12px; }
+
+  .queue-item {
+    background: var(--bg2);
+    border: 2px solid var(--accent-teal);
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .queue-thumb { width: 48px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid var(--accent-teal); flex-shrink: 0; }
+  
+  .queue-title-input {
+    flex: 1;
+    background: rgba(0, 212, 212, 0.05);
+    border: 1px solid var(--accent-teal);
+    border-radius: 6px;
+    color: var(--text-light);
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    padding: 8px 10px;
+    outline: none;
+    transition: all 0.2s;
+  }
+  
+  .queue-title-input:focus { border-color: var(--accent-yellow); background: rgba(255, 215, 0, 0.05); }
+  
+  .queue-remove { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 18px; padding: 0 4px; flex-shrink: 0; transition: color 0.2s; }
+  .queue-remove:hover { color: var(--accent-yellow); }
+
+  .carousel-group { background: var(--bg2); border: 2px solid var(--accent-teal); border-radius: 10px; padding: 16px; }
+  .carousel-group-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .carousel-group-header label { font-size: 11px; color: var(--accent-teal); letter-spacing: 0.1em; flex-shrink: 0; font-weight: 600; }
+  .carousel-group-header input { flex: 1; background: rgba(0, 212, 212, 0.05); border: 1px solid var(--accent-teal); border-radius: 6px; color: var(--text-light); font-family: 'Poppins', sans-serif; font-size: 11px; padding: 8px 10px; outline: none; }
+  .carousel-group-header input:focus { border-color: var(--accent-yellow); }
+  .carousel-thumbs { display: flex; flex-wrap: wrap; gap: 8px; }
+  .carousel-thumb-wrap { position: relative; }
+  .carousel-thumb-wrap img { width: 56px; height: 70px; object-fit: cover; border-radius: 6px; border: 1px solid var(--accent-teal); display: block; }
+  .carousel-thumb-wrap .rm { position: absolute; top: -6px; right: -6px; background: var(--bg); border: 1px solid var(--accent-yellow); border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--accent-yellow); font-size: 10px; transition: all 0.2s; }
+  .carousel-thumb-wrap .rm:hover { background: rgba(255, 215, 0, 0.15); }
+
+  #upload-all-btn { display: block; margin: 16px auto 0; }
+
+  /* PROGRESS */
+  #progress-wrap { display: none; max-width: 640px; margin: 0 auto 16px; padding: 0 16px; }
+  #progress-bar-bg { background: rgba(0, 212, 212, 0.1); border-radius: 6px; height: 10px; overflow: hidden; border: 1px solid var(--accent-teal); }
+  #progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent-teal) 0%, var(--accent-yellow) 100%); border-radius: 6px; width: 0%; transition: width 0.3s; }
+  #progress-text { font-size: 11px; color: var(--accent-teal); letter-spacing: 0.1em; margin-top: 8px; text-align: center; font-weight: 600; }
+
+  /* GRID */
+  main { padding: 28px 16px 40px; max-width: 1400px; margin: 0 auto; }
+  #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
+  @media(min-width: 600px) { #grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 22px; } }
+  @media(min-width: 1024px) { #grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 24px; } }
+  
+  .card { background: var(--bg2); border: 2px solid var(--accent-teal); border-radius: 10px; overflow: hidden; position: relative; }
+  .card-img-wrap { position: relative; }
+  .card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; border-bottom: 2px solid var(--accent-teal); }
+  .card-badge { position: absolute; top: 8px; left: 8px; background: rgba(10, 10, 10, 0.85); border: 1px solid var(--accent-teal); border-radius: 4px; font-size: 10px; color: var(--accent-teal); padding: 3px 7px; letter-spacing: 0.08em; font-weight: 600; }
+  .card-label { font-weight: 600; font-size: 13px; color: var(--text-light); text-align: center; padding: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .del-btn { position: absolute; top: 8px; right: 8px; background: rgba(10, 10, 10, 0.85); border: 2px solid var(--accent-yellow); border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--accent-yellow); font-size: 14px; z-index: 2; transition: all 0.2s; }
+  .del-btn:hover { background: rgba(255, 215, 0, 0.15); border-color: var(--accent-teal); color: var(--accent-teal); }
+
+  footer {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    border-top: 3px solid var(--accent-teal);
+    text-align: center;
+    padding: 18px 16px;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* TOAST */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg2);
+    border: 2px solid var(--accent-teal);
+    color: var(--accent-teal);
+    font-size: 12px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    letter-spacing: 0.1em;
+    z-index: 9000;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    text-align: center;
+    white-space: nowrap;
+    font-weight: 600;
+  }
+  
+  #toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>KINGKRONOS — Admin</h1>
+  <p>✦ Panel de administración ✦</p>
+</header>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div id="login-box">
+    <h2>Acceso Admin</h2>
+    <p>Panel de administración</p>
+    <input class="lf" type="text" id="lu" placeholder="Usuario" autocomplete="off">
+    <input class="lf" type="password" id="lp" placeholder="Contraseña" autocomplete="off">
+    <div id="login-error"></div>
+    <button id="login-btn" onclick="doLogin()">Entrar</button>
+    <a class="back-link" href="index.html">← Volver al escaparate</a>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+
+  <div class="toolbar">
+    <label>Enlace global:</label>
+    <input class="ti" type="text" id="global-link" placeholder="https://linktr.ee/Kingkronos787">
+    <button class="abtn" onclick="saveLink()">Guardar enlace</button>
+    <a class="abtn grey" href="index.html" target="_blank">Ver escaparate</a>
+    <button class="abtn grey" onclick="doLogout()">Cerrar sesión</button>
+  </div>
+
+  <div id="token-info">
+    Para subir fotos necesitas un <strong>GitHub Token</strong> →
+    <a href="https://github.com/settings/tokens/new?scopes=repo&description=KingKronos" target="_blank">Crear token aquí</a>
+    (marca el permiso <em>repo</em> y cópialo abajo)<br><br>
+    <input class="lf ti" type="password" id="gh-token" placeholder="Pega aquí tu GitHub Token (ghp_...)" style="max-width:360px;margin:0 auto 8px;">
+    <br>
+    <button class="abtn" onclick="saveToken()">Guardar token</button>
+  </div>
+
+  <!-- SELECTOR DE MODO -->
+  <div id="mode-selector">
+    <button class="mode-btn active" id="btn-mode-single" onclick="setMode('single')">
+      📷 Fotos individuales<br><span style="font-size:9px;opacity:0.7">una foto = una tarjeta</span>
+    </button>
+    <button class="mode-btn" id="btn-mode-carousel" onclick="setMode('carousel')">
+      🎠 Carrusel de fotos<br><span style="font-size:9px;opacity:0.7">varias fotos = una tarjeta con flechas</span>
+    </button>
+  </div>
+
+  <!-- ZONA SUBIDA -->
+  <div id="upload-zone">
+    <div id="drop-area"
+      onclick="document.getElementById('file-input').click()"
+      ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFiles(event)">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      <p id="drop-hint">Pulsa o arrastra fotos aquí</p>
+      <p class="hint" id="drop-sub">Puedes seleccionar varias a la vez</p>
+      <input type="file" id="file-input" accept="image/*" multiple style="display:none" onchange="addToQueue(event.target.files)">
+    </div>
+  </div>
+
+  <!-- COLA -->
+  <div id="queue-section">
+    <h3 id="queue-title">✦ Edita los títulos antes de subir ✦</h3>
+    <div id="queue-list"></div>
+    <button class="abtn" id="upload-all-btn" onclick="uploadQueue()">Subir todo a la web</button>
+  </div>
+
+  <!-- BARRA PROGRESO -->
+  <div id="progress-wrap">
+    <div id="progress-bar-bg"><div id="progress-bar"></div></div>
+    <div id="progress-text">Subiendo...</div>
+  </div>
+
+  <!-- ARTÍCULOS PUBLICADOS -->
+  <main>
+    <div id="grid">
+      <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);font-size:12px;letter-spacing:0.2em;">Cargando...</div>
+    </div>
+  </main>
+
+  <footer>KINGKRONOS &copy; 2025 &nbsp;·&nbsp; TODOS LOS DERECHOS RESERVADOS</footer>
+</div>
+
+<div id="toast"></div>
+
+<script>
+  const ADMIN_USER = 'JuanDiego';
+  const ADMIN_PASS = 'peluqueria66';
+
+  const REPO   = 'ArturoKronos/kingkronos';
+  const BRANCH = 'main';
+  const RAW    = `https://raw.githubusercontent.com/${REPO}/${BRANCH}`;
+  const API    = `https://api.github.com/repos/${REPO}`;
+  const DEFAULT_LINK = 'https://linktr.ee/Kingkronos787';
+
+  let items = [];
+  let globalLink = DEFAULT_LINK;
+  let ghToken = '';
+
+  let uploadMode = 'single';
+  let queueSingle = [];
+  let queueCarousel = [];
+
+  // ─── LOGIN ───
+  function doLogin() {
+    const u = document.getElementById('lu').value.trim();
+    const p = document.getElementById('lp').value;
+    if (u === ADMIN_USER && p === ADMIN_PASS) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').classList.add('visible');
+      sessionStorage.setItem('kk_admin','1');
+      initApp();
+    } else {
+      document.getElementById('login-error').textContent = 'Usuario o contraseña incorrectos';
+      document.getElementById('lp').value = '';
+    }
+  }
+  function doLogout() { sessionStorage.removeItem('kk_admin'); location.reload(); }
+  document.getElementById('lp').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+  document.getElementById('lu').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('lp').focus(); });
+
+  if (sessionStorage.getItem('kk_admin')==='1') {
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').classList.add('visible');
+    initApp();
+  }
+
+  function initApp() {
+    ghToken = localStorage.getItem('kk_gh_token') || '';
+    if (ghToken) document.getElementById('gh-token').value = '••••••••••••••••';
+    loadData();
+  }
+
+  // ─── MODO ───
+  function setMode(mode) {
+    uploadMode = mode;
+    document.getElementById('btn-mode-single').classList.toggle('active', mode==='single');
+    document.getElementById('btn-mode-carousel').classList.toggle('active', mode==='carousel');
+    queueSingle = [];
+    queueCarousel = [];
+    document.getElementById('file-input').value = '';
+    if (mode === 'carousel') {
+      document.getElementById('drop-hint').textContent = 'Pulsa o arrastra las fotos del carrusel';
+      document.getElementById('drop-sub').textContent = 'Selecciona todas las fotos que formarán el carrusel';
+      document.getElementById('queue-title').textContent = '✦ Configura tu carrusel ✦';
+    } else {
+      document.getElementById('drop-hint').textContent = 'Pulsa o arrastra fotos aquí';
+      document.getElementById('drop-sub').textContent = 'Puedes seleccionar varias a la vez';
+      document.getElementById('queue-title').textContent = '✦ Edita los títulos antes de subir ✦';
+    }
+    renderQueue();
+  }
+
+  // ─── TOKEN ───
+  function saveToken() {
+    const t = document.getElementById('gh-token').value.trim();
+    if (!t || t.startsWith('•')) { toast('Pega un token válido (empieza por ghp_...)'); return; }
+    ghToken = t;
+    localStorage.setItem('kk_gh_token', t);
+    document.getElementById('gh-token').value = '••••••••••••••••';
+    toast('Token guardado ✓');
+  }
+
+  // ─── CARGAR DATA ───
+  async function loadData() {
+    try {
+      const res = await fetch(`${RAW}/data.json?nc=${Date.now()}`);
+      if (res.ok) {
+        const data = await res.json();
+        items = data.items || [];
+        globalLink = data.link || DEFAULT_LINK;
+        document.getElementById('global-link').value = globalLink;
+      }
+    } catch(e) {}
+    renderGrid();
+  }
+
+  // ─── GUARDAR data.json EN GITHUB ───
+  async function saveData() {
+    if (!ghToken) { toast('Necesitas un GitHub Token'); return false; }
+    const content = JSON.stringify({ link: globalLink, items }, null, 2);
+    const encoded = btoa(unescape(encodeURIComponent(content)));
+
+    for (let attempt = 0; attempt < 3; attempt++) {
+      let sha = '';
+      try {
+        const cur = await fetch(`${API}/contents/data.json`, {
+          headers: { Authorization:`token ${ghToken}` }
+        });
+        if (cur.ok) sha = (await cur.json()).sha;
+      } catch(e) {}
+
+      const body = { message:'Actualizar data.json', content:encoded, branch:BRANCH };
+      if (sha) body.sha = sha;
+
+      try {
+        const res = await fetch(`${API}/contents/data.json`, {
+          method:'PUT',
+          headers:{ Authorization:`token ${ghToken}`, 'Content-Type':'application/json' },
+          body:JSON.stringify(body)
+        });
+        if (res.ok) return true;
+        if (res.status === 409 || res.status === 422) {
+          await sleep(1500);
+          continue;
+        }
+        return false;
+      } catch(e) {
+        await sleep(1000);
+      }
+    }
+    return false;
+  }
+
+  // ─── SUBIR IMAGEN A GITHUB ───
+  async function uploadImage(fileName, b64) {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      let sha = '';
+      try {
+        const cur = await fetch(`${API}/contents/fotos/${fileName}`, {
+          headers:{ Authorization:`token ${ghToken}` }
+        });
+        if (cur.ok) sha = (await cur.json()).sha;
+      } catch(e) {}
+
+      const imgBody = { message:`Añadir ${fileName}`, content:b64, branch:BRANCH };
+      if (sha) imgBody.sha = sha;
+
+      try {
+        const res = await fetch(`${API}/contents/fotos/${fileName}`, {
+          method:'PUT',
+          headers:{ Authorization:`token ${ghToken}`, 'Content-Type':'application/json' },
+          body:JSON.stringify(imgBody)
+        });
+        if (res.ok) return true;
+        if (res.status === 409 || res.status === 422) {
+          await sleep(1500);
+          continue;
+        }
+        if (res.status === 403 || res.status === 429) {
+          toast('Límite de GitHub alcanzado, esperando...');
+          await sleep(5000);
+          continue;
+        }
+        return false;
+      } catch(e) {
+        await sleep(1000);
+      }
+    }
+    return false;
+  }
+
+  // ─── GUARDAR ENLACE ───
+  async function saveLink() {
+    globalLink = document.getElementById('global-link').value.trim() || DEFAULT_LINK;
+    toast('Guardando enlace...');
+    const ok = await saveData();
+    toast(ok ? 'Enlace guardado ✓' : '⚠ Error — ¿Tienes el token guardado?');
+  }
+
+  // ─── AÑADIR A LA COLA ───
+  function dragOver(e) { e.preventDefault(); document.getElementById('drop-area').classList.add('drag'); }
+  function dragLeave()  { document.getElementById('drop-area').classList.remove('drag'); }
+  function dropFiles(e) { e.preventDefault(); dragLeave(); addToQueue(e.dataTransfer.files); }
+
+  async function addToQueue(files) {
+    const arr = Array.from(files).filter(f => f.type.startsWith('image/'));
+    if (!arr.length) return;
+
+    if (uploadMode === 'single') {
+      for (const file of arr) {
+        const dataUrl = await fileToBase64(file);
+        const title = file.name.replace(/\.[^.]+$/, '');
+        queueSingle.push({ file, dataUrl, title });
+      }
+    } else {
+      const filesData = [];
+      for (const file of arr) {
+        const dataUrl = await fileToBase64(file);
+        filesData.push({ file, dataUrl });
+      }
+      if (queueCarousel.length > 0) {
+        queueCarousel[0].files.push(...filesData);
+      } else {
+        queueCarousel.push({ files: filesData, title: 'Colección' });
+      }
+    }
+
+    document.getElementById('file-input').value = '';
+    renderQueue();
+  }
+
+  function renderQueue() {
+    const section = document.getElementById('queue-section');
+    const list = document.getElementById('queue-list');
+
+    if (uploadMode === 'single') {
+      if (!queueSingle.length) { section.style.display='none'; return; }
+      section.style.display = 'block';
+      list.innerHTML = '';
+      queueSingle.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'queue-item';
+        div.innerHTML = `
+          <img class="queue-thumb" src="${item.dataUrl}" alt="">
+          <input class="queue-title-input" type="text" value="${esc(item.title)}" placeholder="Título del artículo"
+            onchange="queueSingle[${i}].title=this.value" oninput="queueSingle[${i}].title=this.value">
+          <button class="queue-remove" onclick="removeFromQueue(${i})" title="Quitar">✕</button>
+        `;
+        list.appendChild(div);
+      });
+    } else {
+      if (!queueCarousel.length) { section.style.display='none'; return; }
+      section.style.display = 'block';
+      list.innerHTML = '';
+      queueCarousel.forEach((group, gi) => {
+        const div = document.createElement('div');
+        div.className = 'carousel-group';
+        const thumbsHtml = group.files.map((f, fi) => `
+          <div class="carousel-thumb-wrap">
+            <img src="${f.dataUrl}" alt="">
+            <span class="rm" onclick="removeCarouselPhoto(${gi},${fi})">✕</span>
+          </div>
+        `).join('');
+        div.innerHTML = `
+          <div class="carousel-group-header">
+            <label>Título:</label>
+            <input type="text" value="${esc(group.title)}" placeholder="Título del carrusel"
+              onchange="queueCarousel[${gi}].title=this.value" oninput="queueCarousel[${gi}].title=this.value">
+            <button class="queue-remove" onclick="removeCarouselGroup(${gi})" title="Eliminar carrusel">✕</button>
+          </div>
+          <div class="carousel-thumbs">${thumbsHtml}</div>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:8px;letter-spacing:0.08em;">
+            ${group.files.length} foto(s) — Pulsa el área de subida para añadir más fotos a este carrusel
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
+  }
+
+  function removeFromQueue(i) { queueSingle.splice(i, 1); renderQueue(); }
+  function removeCarouselGroup(gi) { queueCarousel.splice(gi, 1); renderQueue(); }
+  function removeCarouselPhoto(gi, fi) {
+    queueCarousel[gi].files.splice(fi, 1);
+    if (!queueCarousel[gi].files.length) queueCarousel.splice(gi, 1);
+    renderQueue();
+  }
+
+  // ─── SUBIR COLA ───
+  async function uploadQueue() {
+    if (!ghToken) { toast('Primero guarda tu GitHub Token'); return; }
+
+    const pw = document.getElementById('progress-wrap');
+    const pb = document.getElementById('progress-bar');
+    const pt = document.getElementById('progress-text');
+    pw.style.display = 'block';
+    document.getElementById('queue-section').style.display = 'none';
+
+    let okCount = 0;
+
+    if (uploadMode === 'single') {
+      const total = queueSingle.length;
+      if (!total) { pw.style.display='none'; return; }
+
+      for (let i = 0; i < total; i++) {
+        const item = queueSingle[i];
+        const title = item.title.trim() || item.file.name.replace(/\.[^.]+$/,'');
+        const fileName = sanitize(item.file.name);
+
+        pt.textContent = `Subiendo foto ${i+1} de ${total}: ${title}`;
+        pb.style.width = `${Math.round((i / total) * 100)}%`;
+
+        const b64 = item.dataUrl.split(',')[1];
+        const ok = await uploadImage(fileName, b64);
+
+        if (ok) {
+          items.push({ src: fileName, title });
+          okCount++;
+        } else {
+          toast(`⚠ Error subiendo: ${fileName}`);
+        }
+
+        if (i < total - 1) await sleep(600);
+      }
+
+      queueSingle = [];
+
+    } else {
+      const total = queueCarousel.length;
+      if (!total) { pw.style.display='none'; return; }
+
+      for (let gi = 0; gi < total; gi++) {
+        const group = queueCarousel[gi];
+        const title = group.title.trim() || 'Colección';
+        const fileNames = [];
+
+        for (let fi = 0; fi < group.files.length; fi++) {
+          const f = group.files[fi];
+          const fileName = sanitize(f.file.name);
+          pt.textContent = `Carrusel "${title}": subiendo foto ${fi+1} de ${group.files.length}`;
+          pb.style.width = `${Math.round(((gi * group.files.length + fi) / (total * group.files.length)) * 100)}%`;
+
+          const b64 = f.dataUrl.split(',')[1];
+          const ok = await uploadImage(fileName, b64);
+          if (ok) {
+            fileNames.push(fileName);
+          } else {
+            toast(`⚠ Error subiendo foto ${fi+1} del carrusel`);
+          }
+
+          if (fi < group.files.length - 1) await sleep(600);
+        }
+
+        if (fileNames.length > 0) {
+          items.push({ images: fileNames, title });
+          okCount++;
+        }
+      }
+
+      queueCarousel = [];
+    }
+
+    pb.style.width = '100%';
+    pt.textContent = 'Guardando cambios en la web...';
+
+    const saved = await saveData();
+    pw.style.display = 'none';
+
+    if (saved) {
+      toast(`✓ ${okCount} publicación(es) subidas. Recarga el escaparate para verlas.`);
+    } else {
+      toast('Fotos subidas pero error al guardar data.json. Reintenta.');
+    }
+    renderGrid();
+  }
+
+  // ─── ELIMINAR ───
+  async function deleteItem(idx) {
+    if (!confirm('¿Eliminar este artículo?')) return;
+    const item = items[idx];
+    items.splice(idx, 1);
+    renderGrid();
+    toast('Eliminando...');
+
+    const filesToDelete = item.images ? item.images : (item.src ? [item.src] : []);
+    for (const fname of filesToDelete) {
+      try {
+        const cur = await fetch(`${API}/contents/fotos/${fname}`, { headers:{ Authorization:`token ${ghToken}` } });
+        if (cur.ok) {
+          const j = await cur.json();
+          await fetch(`${API}/contents/fotos/${fname}`, {
+            method:'DELETE',
+            headers:{ Authorization:`token ${ghToken}`, 'Content-Type':'application/json' },
+            body:JSON.stringify({ message:`Eliminar ${fname}`, sha:j.sha, branch:BRANCH })
+          });
+        }
+      } catch(e) {}
+      await sleep(400);
+    }
+
+    const ok = await saveData();
+    toast(ok ? 'Artículo eliminado ✓' : 'Error al guardar cambios');
+  }
+
+  // ─── RENDER GRID ───
+  function renderGrid() {
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    if (!items.length) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted);font-size:12px;letter-spacing:0.2em;">Sube tus primeras fotos arriba</div>';
+      return;
+    }
+    items.forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.className = 'card';
+
+      const isCarousel = Array.isArray(item.images) && item.images.length > 0;
+      const firstSrc = isCarousel ? item.images[0] : item.src;
+      const imgSrc = firstSrc && firstSrc.startsWith('http')
+        ? firstSrc
+        : `${RAW}/fotos/${firstSrc}?nc=${Date.now()}`;
+
+      div.innerHTML = `
+        <div class="card-img-wrap">
+          <img src="${imgSrc}" alt="${esc(item.title)}" loading="lazy">
+          ${isCarousel ? `<div class="card-badge">🎠 ${item.images.length} fotos</div>` : ''}
+          <div class="del-btn" onclick="deleteItem(${idx})" title="Eliminar">✕</div>
+        </div>
+        <div class="card-label">${esc(item.title)}</div>
+      `;
+      grid.appendChild(div);
+    });
+  }
+
+  // ─── UTILS ───
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+  function fileToBase64(file) {
+    return new Promise(res => { const r = new FileReader(); r.onload = e => res(e.target.result); r.readAsDataURL(file); });
+  }
+  function sanitize(name) {
+    return name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'-').replace(/[^a-z0-9._-]/g,'');
+  }
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(t._tid);
+    t._tid = setTimeout(() => t.classList.remove('show'), 3500);
+  }
+</script>
+</body>
+</html>
