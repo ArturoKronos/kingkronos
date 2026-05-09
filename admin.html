@@ -204,12 +204,8 @@
 <div id="toast"></div>
 
 <script>
-  // ══════════════════════════════
-  //  CREDENCIALES DEL PANEL ADMIN
-  // ══════════════════════════════
   const ADMIN_USER = 'admin';
   const ADMIN_PASS = 'kingkronos1';
-  // ══════════════════════════════
 
   const REPO   = 'ArturoKronos/kingkronos';
   const BRANCH = 'main';
@@ -221,11 +217,8 @@
   let globalLink = DEFAULT_LINK;
   let ghToken = '';
 
-  // ─── MODO: 'single' o 'carousel' ───
   let uploadMode = 'single';
-  // Cola individual: [{file, dataUrl, title}]
   let queueSingle = [];
-  // Cola carrusel: [{files:[{file,dataUrl}], title}]
   let queueCarousel = [];
 
   // ─── LOGIN ───
