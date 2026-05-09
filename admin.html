@@ -9,7 +9,6 @@
   *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
   :root { --bg:#1a0033; --bg2:#2a004a; --neon-pink:#ff00ff; --neon-cyan:#00ffee; --card-border:#cc00ff; --purple:#7b2cbe; }
   html, body { background:var(--bg); color:#fff; font-family:'Orbitron',sans-serif; min-height:100vh; }
-  body::before { content:''; position:fixed; inset:0; pointer-events:none; z-index:9999; background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.07) 3px,rgba(0,0,0,0.07) 4px); }
 
   /* HEADER */
   header { background:#000; border-bottom:3px solid var(--neon-pink); text-align:center; padding:16px; position:sticky; top:0; z-index:100; }
@@ -264,7 +263,6 @@
     uploadMode = mode;
     document.getElementById('btn-mode-single').classList.toggle('active', mode==='single');
     document.getElementById('btn-mode-carousel').classList.toggle('active', mode==='carousel');
-    // Limpiar cola al cambiar modo
     queueSingle = [];
     queueCarousel = [];
     document.getElementById('file-input').value = '';
@@ -329,7 +327,6 @@
           body:JSON.stringify(body)
         });
         if (res.ok) return true;
-        // Si falla por conflicto SHA, esperar y reintentar
         if (res.status === 409 || res.status === 422) {
           await sleep(1500);
           continue;
@@ -367,7 +364,6 @@
           await sleep(1500);
           continue;
         }
-        // Rate limit
         if (res.status === 403 || res.status === 429) {
           toast('Límite de GitHub alcanzado, esperando...');
           await sleep(5000);
@@ -405,13 +401,11 @@
         queueSingle.push({ file, dataUrl, title });
       }
     } else {
-      // Modo carrusel: todas las fotos seleccionadas forman UN carrusel
       const filesData = [];
       for (const file of arr) {
         const dataUrl = await fileToBase64(file);
         filesData.push({ file, dataUrl });
       }
-      // Si ya hay un carrusel en cola, añadir fotos al existente
       if (queueCarousel.length > 0) {
         queueCarousel[0].files.push(...filesData);
       } else {
@@ -520,14 +514,12 @@
           toast(`⚠ Error subiendo: ${fileName}`);
         }
 
-        // Pequeña pausa entre subidas para no saturar la API de GitHub
         if (i < total - 1) await sleep(600);
       }
 
       queueSingle = [];
 
     } else {
-      // Modo carrusel
       const total = queueCarousel.length;
       if (!total) { pw.style.display='none'; return; }
 
@@ -554,7 +546,6 @@
         }
 
         if (fileNames.length > 0) {
-          // Guardar como item con array de imágenes (carrusel)
           items.push({ images: fileNames, title });
           okCount++;
         }
@@ -585,7 +576,6 @@
     renderGrid();
     toast('Eliminando...');
 
-    // Determinar qué archivos borrar
     const filesToDelete = item.images ? item.images : (item.src ? [item.src] : []);
     for (const fname of filesToDelete) {
       try {
@@ -618,7 +608,6 @@
       const div = document.createElement('div');
       div.className = 'card';
 
-      // Compatibilidad: item puede tener .src (antiguo) o .images (carrusel)
       const isCarousel = Array.isArray(item.images) && item.images.length > 0;
       const firstSrc = isCarousel ? item.images[0] : item.src;
       const imgSrc = firstSrc && firstSrc.startsWith('http')
