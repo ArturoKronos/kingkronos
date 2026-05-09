@@ -30,22 +30,65 @@
   #grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:18px; }
   @media(min-width:600px)  { #grid { grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:20px; } }
   @media(min-width:1024px) { #grid { grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:24px; } }
+
+  /* ── TARJETA BASE ── */
   .card {
     display:block; text-decoration:none; background:var(--bg2);
     border:2px solid var(--card-border); border-radius:8px; overflow:hidden;
     transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s; cursor:pointer;
+    position:relative;
   }
   .card:hover {
     transform:translateY(-5px) scale(1.02);
     box-shadow:0 0 20px #ff00ff88,0 0 40px #cc00ff44,0 8px 20px rgba(0,0,0,0.5);
     border-color:var(--neon-pink);
   }
-  .card img { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; border-bottom:2px solid var(--card-border); }
+
+  /* ── IMAGEN SIMPLE ── */
+  .card-img-simple { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; border-bottom:2px solid var(--card-border); }
+
+  /* ── CARRUSEL ── */
+  .carousel-wrap {
+    position:relative; width:100%; aspect-ratio:3/4; overflow:hidden;
+    border-bottom:2px solid var(--card-border);
+  }
+  .carousel-track {
+    display:flex; height:100%;
+    transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+  .carousel-track img {
+    flex-shrink:0; width:100%; height:100%; object-fit:cover;
+  }
+  .carousel-btn {
+    position:absolute; top:50%; transform:translateY(-50%);
+    background:rgba(10,0,25,0.75); border:1px solid var(--neon-pink);
+    color:var(--neon-pink); border-radius:50%; width:28px; height:28px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; font-size:14px; z-index:10;
+    transition:background 0.2s;
+    /* Evitar que el click en la flecha abra el enlace */
+    pointer-events:all;
+  }
+  .carousel-btn:hover { background:rgba(255,0,255,0.25); }
+  .carousel-btn.prev { left:6px; }
+  .carousel-btn.next { right:6px; }
+  .carousel-dots {
+    position:absolute; bottom:6px; left:50%; transform:translateX(-50%);
+    display:flex; gap:4px; z-index:10;
+  }
+  .carousel-dot {
+    width:6px; height:6px; border-radius:50%;
+    background:rgba(255,255,255,0.35); transition:background 0.2s;
+  }
+  .carousel-dot.active { background:var(--neon-pink); box-shadow:0 0 4px var(--neon-pink); }
+
+  /* ── ETIQUETA ── */
   .card-label {
     font-family:Georgia,serif; font-style:italic; font-size:clamp(12px,2vw,14px);
     color:#fff; text-align:center; padding:10px 8px; background:var(--bg2);
     text-shadow:0 0 6px rgba(255,255,255,0.4); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   }
+
   #status { grid-column:1/-1; text-align:center; padding:60px 20px; color:rgba(204,0,255,0.5); font-size:12px; letter-spacing:0.2em; }
   footer { background:#000; border-top:2px solid var(--purple); text-align:center; padding:16px; font-size:10px; color:rgba(255,255,255,0.2); letter-spacing:0.15em; }
 </style>
@@ -63,38 +106,120 @@
 <footer>KINGKRONOS &copy; 2025 &nbsp;·&nbsp; TODOS LOS DERECHOS RESERVADOS</footer>
 <script>
   const REPO = 'ArturoKronos/kingkronos';
-  const LINK = 'https://linktr.ee/Kingkronos787';
+  const DEFAULT_LINK = 'https://linktr.ee/Kingkronos787';
+
+  // Estado de carruseles: { cardId: currentIndex }
+  const carouselState = {};
 
   async function loadItems() {
     const grid = document.getElementById('grid');
     try {
-      // timestamp para evitar caché en cualquier dispositivo
       const res = await fetch(`https://raw.githubusercontent.com/${REPO}/main/data.json?nocache=${Date.now()}`);
       if (!res.ok) throw new Error();
       const data = await res.json();
-      const link = data.link || LINK;
+      const link = data.link || DEFAULT_LINK;
       grid.innerHTML = '';
       if (!data.items || data.items.length === 0) {
         grid.innerHTML = '<div id="status">Próximamente...</div>';
         return;
       }
-      data.items.forEach(item => {
-        const a = document.createElement('a');
-        a.className = 'card';
-        a.href = link;
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        const imgSrc = item.src.startsWith('http')
-          ? item.src
-          : `https://raw.githubusercontent.com/${REPO}/main/fotos/${item.src}?nocache=${Date.now()}`;
-        a.innerHTML = `
-          <img src="${imgSrc}" alt="${esc(item.title)}" loading="lazy">
-          <div class="card-label">${esc(item.title)}</div>
-        `;
-        grid.appendChild(a);
+      data.items.forEach((item, idx) => {
+        // Compatibilidad: item puede tener .src (foto única) o .images (carrusel)
+        const isCarousel = Array.isArray(item.images) && item.images.length > 1;
+
+        if (isCarousel) {
+          grid.appendChild(buildCarouselCard(item, idx, link));
+        } else {
+          grid.appendChild(buildSimpleCard(item, link));
+        }
       });
     } catch(e) {
       grid.innerHTML = '<div id="status">Próximamente...</div>';
+    }
+  }
+
+  function imgUrl(src) {
+    if (!src) return '';
+    return src.startsWith('http')
+      ? src
+      : `https://raw.githubusercontent.com/${REPO}/main/fotos/${src}?nocache=${Date.now()}`;
+  }
+
+  // ── Tarjeta simple (foto única) ──
+  function buildSimpleCard(item, link) {
+    const a = document.createElement('a');
+    a.className = 'card';
+    a.href = link;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    // Compatibilidad: puede ser .src o .images[0]
+    const src = item.src || (item.images && item.images[0]);
+    a.innerHTML = `
+      <img class="card-img-simple" src="${imgUrl(src)}" alt="${esc(item.title)}" loading="lazy">
+      <div class="card-label">${esc(item.title)}</div>
+    `;
+    return a;
+  }
+
+  // ── Tarjeta carrusel ──
+  function buildCarouselCard(item, idx, link) {
+    const cardId = `carousel-${idx}`;
+    carouselState[cardId] = 0;
+
+    const a = document.createElement('a');
+    a.className = 'card';
+    a.href = link;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.id = cardId;
+
+    // Imágenes del track
+    const imgsHtml = item.images.map(src =>
+      `<img src="${imgUrl(src)}" alt="${esc(item.title)}" loading="lazy">`
+    ).join('');
+
+    // Puntos indicadores
+    const dotsHtml = item.images.map((_, i) =>
+      `<span class="carousel-dot${i===0?' active':''}" data-dot="${i}"></span>`
+    ).join('');
+
+    a.innerHTML = `
+      <div class="carousel-wrap">
+        <div class="carousel-track" id="track-${idx}">${imgsHtml}</div>
+        <button class="carousel-btn prev" data-card="${cardId}" data-dir="-1" title="Anterior">&#8249;</button>
+        <button class="carousel-btn next" data-card="${cardId}" data-dir="1" title="Siguiente">&#8250;</button>
+        <div class="carousel-dots" id="dots-${idx}">${dotsHtml}</div>
+      </div>
+      <div class="card-label">${esc(item.title)}</div>
+    `;
+
+    // Eventos de flechas (sin propagar el click al enlace)
+    a.querySelectorAll('.carousel-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const cid = this.dataset.card;
+        const dir = parseInt(this.dataset.dir);
+        moveCarousel(cid, idx, item.images.length, dir);
+      });
+    });
+
+    return a;
+  }
+
+  function moveCarousel(cardId, idx, total, dir) {
+    let current = carouselState[cardId] || 0;
+    current = (current + dir + total) % total;
+    carouselState[cardId] = current;
+
+    const track = document.getElementById(`track-${idx}`);
+    if (track) track.style.transform = `translateX(-${current * 100}%)`;
+
+    const dotsContainer = document.getElementById(`dots-${idx}`);
+    if (dotsContainer) {
+      dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === current);
+      });
     }
   }
 
