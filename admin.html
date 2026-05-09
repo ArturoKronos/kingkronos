@@ -48,22 +48,44 @@
   #token-info { background:rgba(0,255,238,0.05); border:1px solid rgba(0,255,238,0.2); border-radius:6px; padding:14px 16px; margin:16px auto; max-width:640px; font-size:10px; color:rgba(0,255,238,0.7); letter-spacing:0.08em; line-height:2; text-align:center; }
   #token-info a { color:var(--neon-cyan); }
 
+  /* MODO SUBIDA */
+  #mode-selector { max-width:640px; margin:16px auto 0; padding:0 16px; display:flex; gap:10px; justify-content:center; }
+  .mode-btn { flex:1; max-width:220px; background:rgba(255,255,255,0.04); border:1.5px solid var(--card-border); color:rgba(204,0,255,0.7); font-family:'Orbitron',sans-serif; font-size:10px; padding:10px 8px; border-radius:6px; cursor:pointer; letter-spacing:0.08em; text-align:center; transition:all 0.2s; }
+  .mode-btn.active { background:rgba(204,0,255,0.15); border-color:var(--neon-pink); color:var(--neon-pink); box-shadow:0 0 8px rgba(255,0,255,0.3); }
+  .mode-btn:hover { background:rgba(204,0,255,0.1); }
+
   /* UPLOAD */
-  #upload-zone { margin:20px auto; max-width:640px; padding:0 16px; }
+  #upload-zone { margin:16px auto; max-width:640px; padding:0 16px; }
   #drop-area { border:2px dashed var(--card-border); border-radius:10px; padding:32px 20px; text-align:center; cursor:pointer; transition:background 0.2s,border-color 0.2s; color:rgba(204,0,255,0.6); }
   #drop-area:hover, #drop-area.drag { background:rgba(204,0,255,0.08); border-color:var(--neon-pink); color:var(--neon-pink); }
   #drop-area p { font-size:11px; letter-spacing:0.15em; margin-top:8px; }
+  #drop-area .hint { font-size:9px; color:rgba(0,255,238,0.5); margin-top:6px; letter-spacing:0.1em; }
 
   /* COLA DE SUBIDA */
   #queue-section { display:none; max-width:640px; margin:0 auto 24px; padding:0 16px; }
   #queue-section h3 { font-size:11px; color:var(--neon-cyan); letter-spacing:0.15em; margin-bottom:12px; text-align:center; }
   #queue-list { display:flex; flex-direction:column; gap:10px; }
+
+  /* Item cola — modo individual */
   .queue-item { background:var(--bg2); border:1px solid var(--card-border); border-radius:8px; padding:10px 12px; display:flex; align-items:center; gap:12px; }
   .queue-thumb { width:48px; height:60px; object-fit:cover; border-radius:4px; border:1px solid var(--card-border); flex-shrink:0; }
   .queue-title-input { flex:1; background:rgba(255,255,255,0.06); border:1px solid var(--card-border); border-radius:4px; color:#fff; font-family:'Orbitron',sans-serif; font-size:11px; padding:7px 10px; outline:none; }
   .queue-title-input:focus { border-color:var(--neon-pink); }
   .queue-remove { background:transparent; border:none; color:rgba(255,0,255,0.5); cursor:pointer; font-size:18px; padding:0 4px; flex-shrink:0; }
   .queue-remove:hover { color:var(--neon-pink); }
+
+  /* Item cola — modo carrusel */
+  .carousel-group { background:var(--bg2); border:1.5px solid var(--neon-cyan); border-radius:10px; padding:14px; }
+  .carousel-group-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .carousel-group-header label { font-size:10px; color:var(--neon-cyan); letter-spacing:0.1em; flex-shrink:0; }
+  .carousel-group-header input { flex:1; background:rgba(255,255,255,0.06); border:1px solid var(--neon-cyan); border-radius:4px; color:#fff; font-family:'Orbitron',sans-serif; font-size:11px; padding:7px 10px; outline:none; }
+  .carousel-group-header input:focus { border-color:var(--neon-pink); }
+  .carousel-thumbs { display:flex; flex-wrap:wrap; gap:8px; }
+  .carousel-thumb-wrap { position:relative; }
+  .carousel-thumb-wrap img { width:56px; height:70px; object-fit:cover; border-radius:4px; border:1px solid var(--card-border); display:block; }
+  .carousel-thumb-wrap .rm { position:absolute; top:-6px; right:-6px; background:#1a0033; border:1px solid var(--neon-pink); border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--neon-pink); font-size:10px; }
+  .carousel-thumb-wrap .rm:hover { background:rgba(255,0,255,0.2); }
+
   #upload-all-btn { display:block; margin:14px auto 0; }
 
   /* PROGRESS */
@@ -78,9 +100,11 @@
   @media(min-width:600px)  { #grid { grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:20px; } }
   @media(min-width:1024px) { #grid { grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:24px; } }
   .card { background:var(--bg2); border:2px solid var(--card-border); border-radius:8px; overflow:hidden; position:relative; }
+  .card-img-wrap { position:relative; }
   .card img { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; border-bottom:2px solid var(--card-border); }
+  .card-badge { position:absolute; top:6px; left:6px; background:rgba(10,0,25,0.85); border:1px solid var(--neon-cyan); border-radius:3px; font-size:9px; color:var(--neon-cyan); padding:2px 6px; letter-spacing:0.1em; }
   .card-label { font-family:Georgia,serif; font-style:italic; font-size:13px; color:#fff; text-align:center; padding:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .del-btn { position:absolute; top:6px; right:6px; background:rgba(10,0,20,0.88); border:1px solid var(--neon-pink); border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--neon-pink); font-size:14px; }
+  .del-btn { position:absolute; top:6px; right:6px; background:rgba(10,0,20,0.88); border:1px solid var(--neon-pink); border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--neon-pink); font-size:14px; z-index:2; }
   .del-btn:hover { background:rgba(255,0,255,0.2); }
 
   footer { background:#000; border-top:2px solid var(--purple); text-align:center; padding:16px; font-size:10px; color:rgba(255,255,255,0.2); letter-spacing:0.15em; }
@@ -130,6 +154,16 @@
     <button class="abtn" onclick="saveToken()">Guardar token</button>
   </div>
 
+  <!-- SELECTOR DE MODO -->
+  <div id="mode-selector">
+    <button class="mode-btn active" id="btn-mode-single" onclick="setMode('single')">
+      📷 Fotos individuales<br><span style="font-size:8px;opacity:0.7">una foto = una tarjeta</span>
+    </button>
+    <button class="mode-btn" id="btn-mode-carousel" onclick="setMode('carousel')">
+      🎠 Carrusel de fotos<br><span style="font-size:8px;opacity:0.7">varias fotos = una tarjeta con flechas</span>
+    </button>
+  </div>
+
   <!-- ZONA SUBIDA -->
   <div id="upload-zone">
     <div id="drop-area"
@@ -139,14 +173,15 @@
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
         <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
       </svg>
-      <p>Pulsa o arrastra fotos aquí</p>
+      <p id="drop-hint">Pulsa o arrastra fotos aquí</p>
+      <p class="hint" id="drop-sub">Puedes seleccionar varias a la vez</p>
       <input type="file" id="file-input" accept="image/*" multiple style="display:none" onchange="addToQueue(event.target.files)">
     </div>
   </div>
 
   <!-- COLA CON TÍTULOS EDITABLES -->
   <div id="queue-section">
-    <h3>✦ EDITA LOS TÍTULOS ANTES DE SUBIR ✦</h3>
+    <h3 id="queue-title">✦ EDITA LOS TÍTULOS ANTES DE SUBIR ✦</h3>
     <div id="queue-list"></div>
     <button class="abtn" id="upload-all-btn" onclick="uploadQueue()">Subir todo a la web</button>
   </div>
@@ -187,8 +222,12 @@
   let globalLink = DEFAULT_LINK;
   let ghToken = '';
 
-  // ─── COLA DE IMÁGENES PENDIENTES ───
-  let queue = []; // [{file, dataUrl, title}]
+  // ─── MODO: 'single' o 'carousel' ───
+  let uploadMode = 'single';
+  // Cola individual: [{file, dataUrl, title}]
+  let queueSingle = [];
+  // Cola carrusel: [{files:[{file,dataUrl}], title}]
+  let queueCarousel = [];
 
   // ─── LOGIN ───
   function doLogin() {
@@ -220,6 +259,27 @@
     loadData();
   }
 
+  // ─── MODO ───
+  function setMode(mode) {
+    uploadMode = mode;
+    document.getElementById('btn-mode-single').classList.toggle('active', mode==='single');
+    document.getElementById('btn-mode-carousel').classList.toggle('active', mode==='carousel');
+    // Limpiar cola al cambiar modo
+    queueSingle = [];
+    queueCarousel = [];
+    document.getElementById('file-input').value = '';
+    if (mode === 'carousel') {
+      document.getElementById('drop-hint').textContent = 'Pulsa o arrastra las fotos del carrusel';
+      document.getElementById('drop-sub').textContent = 'Selecciona todas las fotos que formarán el carrusel';
+      document.getElementById('queue-title').textContent = '✦ CONFIGURA TU CARRUSEL ✦';
+    } else {
+      document.getElementById('drop-hint').textContent = 'Pulsa o arrastra fotos aquí';
+      document.getElementById('drop-sub').textContent = 'Puedes seleccionar varias a la vez';
+      document.getElementById('queue-title').textContent = '✦ EDITA LOS TÍTULOS ANTES DE SUBIR ✦';
+    }
+    renderQueue();
+  }
+
   // ─── TOKEN ───
   function saveToken() {
     const t = document.getElementById('gh-token').value.trim();
@@ -244,24 +304,81 @@
     renderGrid();
   }
 
-  // ─── GUARDAR data.json EN GITHUB ───
+  // ─── GUARDAR data.json EN GITHUB (con reintentos) ───
   async function saveData() {
     if (!ghToken) { toast('Necesitas un GitHub Token'); return false; }
     const content = JSON.stringify({ link: globalLink, items }, null, 2);
     const encoded = btoa(unescape(encodeURIComponent(content)));
-    let sha = '';
-    try {
-      const cur = await fetch(`${API}/contents/data.json`, { headers: { Authorization:`token ${ghToken}` } });
-      if (cur.ok) sha = (await cur.json()).sha;
-    } catch(e) {}
-    const body = { message:'Actualizar data.json', content:encoded, branch:BRANCH };
-    if (sha) body.sha = sha;
-    const res = await fetch(`${API}/contents/data.json`, {
-      method:'PUT',
-      headers:{ Authorization:`token ${ghToken}`, 'Content-Type':'application/json' },
-      body:JSON.stringify(body)
-    });
-    return res.ok;
+
+    for (let attempt = 0; attempt < 3; attempt++) {
+      let sha = '';
+      try {
+        const cur = await fetch(`${API}/contents/data.json`, {
+          headers: { Authorization:`token ${ghToken}` }
+        });
+        if (cur.ok) sha = (await cur.json()).sha;
+      } catch(e) {}
+
+      const body = { message:'Actualizar data.json', content:encoded, branch:BRANCH };
+      if (sha) body.sha = sha;
+
+      try {
+        const res = await fetch(`${API}/contents/data.json`, {
+          method:'PUT',
+          headers:{ Authorization:`token ${ghToken}`, 'Content-Type':'application/json' },
+          body:JSON.stringify(body)
+        });
+        if (res.ok) return true;
+        // Si falla por conflicto SHA, esperar y reintentar
+        if (res.status === 409 || res.status === 422) {
+          await sleep(1500);
+          continue;
+        }
+        return false;
+      } catch(e) {
+        await sleep(1000);
+      }
+    }
+    return false;
+  }
+
+  // ─── SUBIR IMAGEN A GITHUB (con reintentos) ───
+  async function uploadImage(fileName, b64) {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      let sha = '';
+      try {
+        const cur = await fetch(`${API}/contents/fotos/${fileName}`, {
+          headers:{ Authorization:`token ${ghToken}` }
+        });
+        if (cur.ok) sha = (await cur.json()).sha;
+      } catch(e) {}
+
+      const imgBody = { message:`Añadir ${fileName}`, content:b64, branch:BRANCH };
+      if (sha) imgBody.sha = sha;
+
+      try {
+        const res = await fetch(`${API}/contents/fotos/${fileName}`, {
+          method:'PUT',
+          headers:{ Authorization:`token ${ghToken}`, 'Content-Type':'application/json' },
+          body:JSON.stringify(imgBody)
+        });
+        if (res.ok) return true;
+        if (res.status === 409 || res.status === 422) {
+          await sleep(1500);
+          continue;
+        }
+        // Rate limit
+        if (res.status === 403 || res.status === 429) {
+          toast('Límite de GitHub alcanzado, esperando...');
+          await sleep(5000);
+          continue;
+        }
+        return false;
+      } catch(e) {
+        await sleep(1000);
+      }
+    }
+    return false;
   }
 
   // ─── GUARDAR ENLACE ───
@@ -280,11 +397,28 @@
   async function addToQueue(files) {
     const arr = Array.from(files).filter(f => f.type.startsWith('image/'));
     if (!arr.length) return;
-    for (const file of arr) {
-      const dataUrl = await fileToBase64(file);
-      const title = file.name.replace(/\.[^.]+$/, ''); // nombre sin extensión como título por defecto
-      queue.push({ file, dataUrl, title });
+
+    if (uploadMode === 'single') {
+      for (const file of arr) {
+        const dataUrl = await fileToBase64(file);
+        const title = file.name.replace(/\.[^.]+$/, '');
+        queueSingle.push({ file, dataUrl, title });
+      }
+    } else {
+      // Modo carrusel: todas las fotos seleccionadas forman UN carrusel
+      const filesData = [];
+      for (const file of arr) {
+        const dataUrl = await fileToBase64(file);
+        filesData.push({ file, dataUrl });
+      }
+      // Si ya hay un carrusel en cola, añadir fotos al existente
+      if (queueCarousel.length > 0) {
+        queueCarousel[0].files.push(...filesData);
+      } else {
+        queueCarousel.push({ files: filesData, title: 'Colección' });
+      }
     }
+
     document.getElementById('file-input').value = '';
     renderQueue();
   }
@@ -292,30 +426,69 @@
   function renderQueue() {
     const section = document.getElementById('queue-section');
     const list = document.getElementById('queue-list');
-    if (!queue.length) { section.style.display='none'; return; }
-    section.style.display = 'block';
-    list.innerHTML = '';
-    queue.forEach((item, i) => {
-      const div = document.createElement('div');
-      div.className = 'queue-item';
-      div.innerHTML = `
-        <img class="queue-thumb" src="${item.dataUrl}" alt="">
-        <input class="queue-title-input" type="text" value="${esc(item.title)}" placeholder="Título del artículo" onchange="queue[${i}].title=this.value" oninput="queue[${i}].title=this.value">
-        <button class="queue-remove" onclick="removeFromQueue(${i})" title="Quitar">✕</button>
-      `;
-      list.appendChild(div);
-    });
+
+    if (uploadMode === 'single') {
+      if (!queueSingle.length) { section.style.display='none'; return; }
+      section.style.display = 'block';
+      list.innerHTML = '';
+      queueSingle.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'queue-item';
+        div.innerHTML = `
+          <img class="queue-thumb" src="${item.dataUrl}" alt="">
+          <input class="queue-title-input" type="text" value="${esc(item.title)}" placeholder="Título del artículo"
+            onchange="queueSingle[${i}].title=this.value" oninput="queueSingle[${i}].title=this.value">
+          <button class="queue-remove" onclick="removeFromQueue(${i})" title="Quitar">✕</button>
+        `;
+        list.appendChild(div);
+      });
+    } else {
+      if (!queueCarousel.length) { section.style.display='none'; return; }
+      section.style.display = 'block';
+      list.innerHTML = '';
+      queueCarousel.forEach((group, gi) => {
+        const div = document.createElement('div');
+        div.className = 'carousel-group';
+        const thumbsHtml = group.files.map((f, fi) => `
+          <div class="carousel-thumb-wrap">
+            <img src="${f.dataUrl}" alt="">
+            <span class="rm" onclick="removeCarouselPhoto(${gi},${fi})">✕</span>
+          </div>
+        `).join('');
+        div.innerHTML = `
+          <div class="carousel-group-header">
+            <label>Título:</label>
+            <input type="text" value="${esc(group.title)}" placeholder="Título del carrusel"
+              onchange="queueCarousel[${gi}].title=this.value" oninput="queueCarousel[${gi}].title=this.value">
+            <button class="queue-remove" onclick="removeCarouselGroup(${gi})" title="Eliminar carrusel">✕</button>
+          </div>
+          <div class="carousel-thumbs">${thumbsHtml}</div>
+          <div style="font-size:9px;color:rgba(0,255,238,0.5);margin-top:8px;letter-spacing:0.1em;">
+            ${group.files.length} foto(s) — Pulsa el área de subida para añadir más fotos a este carrusel
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
   }
 
   function removeFromQueue(i) {
-    queue.splice(i, 1);
+    queueSingle.splice(i, 1);
+    renderQueue();
+  }
+  function removeCarouselGroup(gi) {
+    queueCarousel.splice(gi, 1);
+    renderQueue();
+  }
+  function removeCarouselPhoto(gi, fi) {
+    queueCarousel[gi].files.splice(fi, 1);
+    if (!queueCarousel[gi].files.length) queueCarousel.splice(gi, 1);
     renderQueue();
   }
 
   // ─── SUBIR COLA A GITHUB ───
   async function uploadQueue() {
     if (!ghToken) { toast('Primero guarda tu GitHub Token'); return; }
-    if (!queue.length) return;
 
     const pw = document.getElementById('progress-wrap');
     const pb = document.getElementById('progress-bar');
@@ -323,38 +496,71 @@
     pw.style.display = 'block';
     document.getElementById('queue-section').style.display = 'none';
 
-    let ok = 0;
-    for (let i = 0; i < queue.length; i++) {
-      const item = queue[i];
-      const title = item.title.trim() || item.file.name.replace(/\.[^.]+$/,'');
-      const fileName = sanitize(item.file.name);
+    let okCount = 0;
 
-      pt.textContent = `Subiendo ${i+1} de ${queue.length}: ${title}`;
-      pb.style.width = `${Math.round((i / queue.length) * 100)}%`;
+    if (uploadMode === 'single') {
+      const total = queueSingle.length;
+      if (!total) { pw.style.display='none'; return; }
 
-      // subir imagen
-      let sha = '';
-      try {
-        const cur = await fetch(`${API}/contents/fotos/${fileName}`, { headers:{ Authorization:`token ${ghToken}` } });
-        if (cur.ok) sha = (await cur.json()).sha;
-      } catch(e) {}
+      for (let i = 0; i < total; i++) {
+        const item = queueSingle[i];
+        const title = item.title.trim() || item.file.name.replace(/\.[^.]+$/,'');
+        const fileName = sanitize(item.file.name);
 
-      const b64 = item.dataUrl.split(',')[1];
-      const imgBody = { message:`Añadir ${fileName}`, content:b64, branch:BRANCH };
-      if (sha) imgBody.sha = sha;
+        pt.textContent = `Subiendo foto ${i+1} de ${total}: ${title}`;
+        pb.style.width = `${Math.round((i / total) * 100)}%`;
 
-      const imgRes = await fetch(`${API}/contents/fotos/${fileName}`, {
-        method:'PUT',
-        headers:{ Authorization:`token ${ghToken}`, 'Content-Type':'application/json' },
-        body:JSON.stringify(imgBody)
-      });
+        const b64 = item.dataUrl.split(',')[1];
+        const ok = await uploadImage(fileName, b64);
 
-      if (imgRes.ok) {
-        items.push({ src: fileName, title });
-        ok++;
-      } else {
-        toast(`Error subiendo ${fileName}`);
+        if (ok) {
+          items.push({ src: fileName, title });
+          okCount++;
+        } else {
+          toast(`⚠ Error subiendo: ${fileName}`);
+        }
+
+        // Pequeña pausa entre subidas para no saturar la API de GitHub
+        if (i < total - 1) await sleep(600);
       }
+
+      queueSingle = [];
+
+    } else {
+      // Modo carrusel
+      const total = queueCarousel.length;
+      if (!total) { pw.style.display='none'; return; }
+
+      for (let gi = 0; gi < total; gi++) {
+        const group = queueCarousel[gi];
+        const title = group.title.trim() || 'Colección';
+        const fileNames = [];
+
+        for (let fi = 0; fi < group.files.length; fi++) {
+          const f = group.files[fi];
+          const fileName = sanitize(f.file.name);
+          pt.textContent = `Carrusel "${title}": subiendo foto ${fi+1} de ${group.files.length}`;
+          pb.style.width = `${Math.round(((gi * group.files.length + fi) / (total * group.files.length)) * 100)}%`;
+
+          const b64 = f.dataUrl.split(',')[1];
+          const ok = await uploadImage(fileName, b64);
+          if (ok) {
+            fileNames.push(fileName);
+          } else {
+            toast(`⚠ Error subiendo foto ${fi+1} del carrusel`);
+          }
+
+          if (fi < group.files.length - 1) await sleep(600);
+        }
+
+        if (fileNames.length > 0) {
+          // Guardar como item con array de imágenes (carrusel)
+          items.push({ images: fileNames, title });
+          okCount++;
+        }
+      }
+
+      queueCarousel = [];
     }
 
     pb.style.width = '100%';
@@ -362,10 +568,9 @@
 
     const saved = await saveData();
     pw.style.display = 'none';
-    queue = [];
 
     if (saved) {
-      toast(`✓ ${ok} foto(s) publicadas. Recarga el escaparate para verlas.`);
+      toast(`✓ ${okCount} publicación(es) subidas. Recarga el escaparate para verlas.`);
     } else {
       toast('Fotos subidas pero error al guardar data.json. Reintenta.');
     }
@@ -379,17 +584,24 @@
     items.splice(idx, 1);
     renderGrid();
     toast('Eliminando...');
-    try {
-      const cur = await fetch(`${API}/contents/fotos/${item.src}`, { headers:{ Authorization:`token ${ghToken}` } });
-      if (cur.ok) {
-        const j = await cur.json();
-        await fetch(`${API}/contents/fotos/${item.src}`, {
-          method:'DELETE',
-          headers:{ Authorization:`token ${ghToken}`, 'Content-Type':'application/json' },
-          body:JSON.stringify({ message:`Eliminar ${item.src}`, sha:j.sha, branch:BRANCH })
-        });
-      }
-    } catch(e) {}
+
+    // Determinar qué archivos borrar
+    const filesToDelete = item.images ? item.images : (item.src ? [item.src] : []);
+    for (const fname of filesToDelete) {
+      try {
+        const cur = await fetch(`${API}/contents/fotos/${fname}`, { headers:{ Authorization:`token ${ghToken}` } });
+        if (cur.ok) {
+          const j = await cur.json();
+          await fetch(`${API}/contents/fotos/${fname}`, {
+            method:'DELETE',
+            headers:{ Authorization:`token ${ghToken}`, 'Content-Type':'application/json' },
+            body:JSON.stringify({ message:`Eliminar ${fname}`, sha:j.sha, branch:BRANCH })
+          });
+        }
+      } catch(e) {}
+      await sleep(400);
+    }
+
     const ok = await saveData();
     toast(ok ? 'Artículo eliminado ✓' : 'Error al guardar cambios');
   }
@@ -405,17 +617,28 @@
     items.forEach((item, idx) => {
       const div = document.createElement('div');
       div.className = 'card';
-      const imgSrc = item.src.startsWith('http') ? item.src : `${RAW}/fotos/${item.src}?nc=${Date.now()}`;
+
+      // Compatibilidad: item puede tener .src (antiguo) o .images (carrusel)
+      const isCarousel = Array.isArray(item.images) && item.images.length > 0;
+      const firstSrc = isCarousel ? item.images[0] : item.src;
+      const imgSrc = firstSrc && firstSrc.startsWith('http')
+        ? firstSrc
+        : `${RAW}/fotos/${firstSrc}?nc=${Date.now()}`;
+
       div.innerHTML = `
-        <img src="${imgSrc}" alt="${esc(item.title)}" loading="lazy">
+        <div class="card-img-wrap">
+          <img src="${imgSrc}" alt="${esc(item.title)}" loading="lazy">
+          ${isCarousel ? `<div class="card-badge">🎠 ${item.images.length} fotos</div>` : ''}
+          <div class="del-btn" onclick="deleteItem(${idx})" title="Eliminar">✕</div>
+        </div>
         <div class="card-label">${esc(item.title)}</div>
-        <div class="del-btn" onclick="deleteItem(${idx})" title="Eliminar">✕</div>
       `;
       grid.appendChild(div);
     });
   }
 
   // ─── UTILS ───
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
   function fileToBase64(file) {
     return new Promise(res => { const r = new FileReader(); r.onload = e => res(e.target.result); r.readAsDataURL(file); });
   }
